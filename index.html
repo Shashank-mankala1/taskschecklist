@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+        integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="logo" style="filter: invert(1);">
+        <a href="index.html"><img src="img/logo.png" alt="todolist"></a>
+    </div>
+    <div class="container">
+        
+        <div class="todolist">
+            <div class="header">
+                <h1><span id="totaltasks">0</span> <span>Pending tasks</span></h1>
+            </div>
+
+            <!-- <div class="searchitems">
+                <input type="search" id="searchtext" placeholder="search your list">
+                <button type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div> -->
+
+            <div class="list">
+                <ul class="list1"></ul>
+            </div>
+            <span id="error"></span>
+            <form class="addtask">
+                <input type="text" id="newtask" placeholder="Add new tasks.... " autocomplete="off">
+                <button>
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
