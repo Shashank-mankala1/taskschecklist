@@ -1,48 +1,9 @@
-let inputelement = document.getElementById('newtask');
-let formelement = document.querySelector('form');
-let listelement = document.querySelector('ul');
-let totaltaskselement = document.getElementById('totaltasks');
-let search =document.getElementById("searchtext");
-let tasklist = [
-    'Do Homework',
-    'Bring some milk from Store'
-];
-function deleteitem(e) {
-    let task = e.target.parentElement.previousElementSibling.innerHTML;
-    let index = tasklist.indexOf(task);
-    if (index != -1) {
-        tasklist.splice(index, 1);
-    }
-    populatelist();
-}
-function populatelist() {
-    listelement.innerHTML = '';
-    tasklist.forEach(function (item) {
-        let newitem = document.createElement('li');
+var inputelement = document.getElementById("newtask");
+var formelement = document.querySelector('form');
+var listelement = document.querySelector('ul');
+var totaltaskselement = document.getElementById('totaltasks');
 
-        // add new span
-        let span = document.createElement('span');
-        span.innerHTML = item;
-        newitem.appendChild(span);
-
-        // add delete button
-        let anchorelement = document.createElement('a');
-        anchorelement.classList.add('delete');
-        anchorelement.innerHTML = '<i class="fas fa-trash-alt"></i>';
-        anchorelement.title="Remove this task";
-        newitem.appendChild(anchorelement);
-
-
-        anchorelement.addEventListener('click', (e) => deleteitem(e));
-        // add li to ul 
-        listelement.appendChild(newitem);
-    });
-
-    totaltaskselement.innerHTML = tasklist.length;
-}
-
-populatelist();
-
+var task= inputelement.value;
 function doesnothavewhitespaces(s) {
     let stringwithoutspaces = s.trim();
     return stringwithoutspaces.length > 0;
@@ -59,40 +20,77 @@ function clearerror() {
 }
 
 function tasksinclude(e) {
-    if (!tasklist.includes(e)) return false;
-    else {
-        errorMessage();
-        setTimeout(clearerror, 1000);
-        return true;
+    var tasks = JSON.parse(localStorage.getItem("tasks"));
+    try{ 
+        if (!tasks.includes(e)) 
+            return false;
+        else {
+            errorMessage();
+            setTimeout(clearerror, 1000);
+            return true;
+        }
+    }
+    catch(e){
+        return false;
     }
 }
-function addtask() {
-    if (inputelement.value && doesnothavewhitespaces(inputelement.value) && !tasksinclude(inputelement.value)) {
-        tasklist.push(inputelement.value);
-        populatelist();
-    }
-    inputelement.value = '';
-}
-
+// formelement.addEventListener("submit", addtask);
 formelement.addEventListener('submit', function (e) {
     e.preventDefault();
     addtask();
 })
+function fetchtasks(){
+    listelement.innerHTML = '';
+    var tasks = JSON.parse(localStorage.getItem("tasks"));
+    listelement.innerHTML = '';
+    tasks.forEach(function (item) {
+        let newitem = document.createElement('li');
 
-// search.addEventListener("input",function(){
-//     let inputval=search.value;
-//     console.log("fired", inputval);
-//     let listitems=document.getElementsByClassName("list1");
-//     console.log(listitems);
-//     Array.from(listitems).forEach(function(element){
-//         let listtext=element.getElementsByTagName("li")[0].innerText;
-//         console.log(listtext);
-//         if(listtext.includes(inputval)){
-//             element.style.display= "none";
-//         }
-//         else{
-//             element.style.display= "block";
+        // add new span
+        let span = document.createElement('span');
+        span.innerHTML = item;
+        newitem.appendChild(span);
 
-//         }
-//     })
-// })
+        // add delete button
+        let anchorelement = document.createElement('a');
+        anchorelement.classList.add('delete');
+        anchorelement.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        anchorelement.title="Remove this task";
+        newitem.appendChild(anchorelement);
+
+        anchorelement.addEventListener('click', (e) => deletetask(e));
+        // add li to ul 
+        listelement.appendChild(newitem);
+    });
+
+    totaltaskselement.innerHTML = tasks.length;
+}
+fetchtasks();
+function addtask(){
+    if (inputelement.value && doesnothavewhitespaces(inputelement.value) && !tasksinclude(inputelement.value)) {
+        if (localStorage.getItem("tasks") === null) {
+            var tasks = [];
+            tasks.push(inputelement.value);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        } else {
+            var tasks = JSON.parse(localStorage.getItem("tasks"));
+            tasks.push(inputelement.value);
+            // tasks.push(task);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+        fetchtasks();
+    }
+    inputelement.value = '';
+    // e.preventDefault();
+}
+function deletetask(e){
+    var deletetask= e.target.parentElement.previousElementSibling.innerHTML;
+    var tasks = JSON.parse(localStorage.getItem("tasks"));
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i] == deletetask) {
+            tasks.splice(i, 1);
+        }
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    fetchtasks();
+}
